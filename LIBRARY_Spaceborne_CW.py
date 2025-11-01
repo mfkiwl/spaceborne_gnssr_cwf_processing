@@ -53,39 +53,44 @@ def Download_cWF_File_List(username, password, cWF_data_dir_local):
         1: the file is downloaded sucessfully
         0: unable to download the file
     """
-    ulr_cygnss = 'https://aliga.ice.csic.es/gold_rtr_mining/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/List_CYGNSS_RawIF_Track.txt'
+    ulr_cygnss = 'https://gnssr-data.ice.csic.es/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/List_CYGNSS_RawIF_Track.txt'
     filename = cWF_data_dir_local + os.path.basename(urlparse(ulr_cygnss).path)
-    try:
-        print ("Downloading file: " + '"' + os.path.basename(urlparse(ulr_cygnss).path) + '"' + '...')
-        r = requests.get(ulr_cygnss, auth=(username,password))
-    except:
-        print ("Cannot download CYGNSS complex waveform list file")
-        return False
+    if not os.path.exists(filename):
+        try:
+            print ("Downloading file: " + '"' + os.path.basename(urlparse(ulr_cygnss).path) + '"' + '...')
+            r = requests.get(ulr_cygnss, auth=(username,password))
+        except:
+            print ("Cannot download CYGNSS complex waveform list file")
+            return False
 
-    if r.status_code == 200:
-        open(filename, 'wb').write(r.content)
-        print("File " +  '"' + os.path.basename(urlparse(ulr_cygnss).path) + '"' + ' downloaded!')
+        if r.status_code == 200:
+            open(filename, 'wb').write(r.content)
+            print("File " +  '"' + os.path.basename(urlparse(ulr_cygnss).path) + '"' + ' downloaded!')
+        else:
+            print("Cannot download CYGNSS complex waveform list file")
+            return False
     else:
-        print("Cannot download CYGNSS complex waveform list file")
-        return False
-
-    ulr_tds1 = 'https://aliga.ice.csic.es/gold_rtr_mining/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/List_TDS1_RawIF_Track.txt'
-    filename = cWF_data_dir_local + os.path.basename(urlparse(ulr_tds1).path)
-    try:
-        print ("Downloading file: " + '"' + os.path.basename(urlparse(ulr_tds1).path) + '"' + '...')
-        r = requests.get(ulr_tds1, auth=(username,password))
-    except:
-        print ("Cannot download TDS-1 complex waveform list file")
-        return False
-
-    if r.status_code == 200:
-        open(filename, 'wb').write(r.content)
-        print("File " +  '"' + os.path.basename(urlparse(ulr_tds1).path) + '"' + ' downloaded!')
-        return True
-    else:
-        print("Cannot download TDS-1 complex waveform list file")
-        return False 
+        print('CYGNSS complex waveform list file already present:', filename)
         
+    ulr_tds1 = 'https://gnssr-data.ice.csic.es/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/List_TDS1_RawIF_Track.txt'
+    filename = cWF_data_dir_local + os.path.basename(urlparse(ulr_tds1).path)
+    if not os.path.exists(filename):
+        try:
+            print ("Downloading file: " + '"' + os.path.basename(urlparse(ulr_tds1).path) + '"' + '...')
+            r = requests.get(ulr_tds1, auth=(username,password))
+        except:
+            print ("Cannot download TDS-1 complex waveform list file")
+            return False
+
+        if r.status_code == 200:
+            open(filename, 'wb').write(r.content)
+            print("File " +  '"' + os.path.basename(urlparse(ulr_tds1).path) + '"' + ' downloaded!')
+            return True
+        else:
+            print("Cannot download TDS-1 complex waveform list file")
+            return False 
+    else:
+        print('TDS-1 complex waveform list file already present:', filename)        
         
 def isInsideRect(x1, y1, x2, y2, px, py):
     """
@@ -114,8 +119,8 @@ def Find_RawIF_Track(Region, Start_time, Stop_time, TrackListFile, cWF_data_dir_
         A list of raw IF tracks and their location in the GOLD-RTR server
     """
     f_TrackListFile = open(TrackListFile, 'w')
-    dir_cygnss_cwf = 'https://aliga.ice.csic.es/gold_rtr_mining/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/CYGNSS_CWF_Products/CYGNSS_Complex_Waveform_Release/'
-    dir_tds1_cwf   = 'https://aliga.ice.csic.es/gold_rtr_mining/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/TDS1_CWF_Products/TDS1_Complex_Waveform_Release/'
+    dir_cygnss_cwf = 'https://gnssr-data.ice.csic.es/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/CYGNSS_CWF_Products/CYGNSS_Complex_Waveform_Release/'
+    dir_tds1_cwf   = 'https://gnssr-data.ice.csic.es/data/Spaceborne_GNSSR_RawIFData_OnGroundProcessing/TDS1_CWF_Products/TDS1_Complex_Waveform_Release/'
     start_time_obj = datetime.datetime.strptime(Start_time, '%Y-%m-%dT%H:%M:%S')
     stop_time_obj  = datetime.datetime.strptime(Stop_time,  '%Y-%m-%dT%H:%M:%S')
     # Find CYGNSS tracks
@@ -190,20 +195,23 @@ def Download_cWF_File(url, username, password, cWF_data_dir_local):
         0: unable to download the file
     """
     filename = cWF_data_dir_local + os.path.basename(urlparse(url).path)
-    try:
-        print ("Downloading file: " + '"' + os.path.basename(urlparse(url).path) + '"' + '...')
-        r = requests.get(url, auth=(username,password))
-    except:
-        print ("Cannot download the complex waveform file")
-        return False
+    if not os.path.exists(filename):    
+        try:
+            print ("Downloading file: " + '"' + os.path.basename(urlparse(url).path) + '"' + '...')
+            r = requests.get(url, auth=(username,password))
+        except:
+            print ("Cannot download the complex waveform file")
+            return False
 
-    if r.status_code == 200:
-        open(filename, 'wb').write(r.content)
-        print("File " +  '"' + os.path.basename(urlparse(url).path) + '"' + ' downloaded!')
-        return True
+        if r.status_code == 200:
+            open(filename, 'wb').write(r.content)
+            print("File " +  '"' + os.path.basename(urlparse(url).path) + '"' + ' downloaded!')
+            return True
+        else:
+            print("Cannot download the complex waveform file")
+            return False 
     else:
-        print("Cannot download the complex waveform file")
-        return False  
+        print('File already present:', filename)
 #==========================================================
 
 def generate_kml_scatter(Name, asp, lon, lat, value, min_value, max_value):

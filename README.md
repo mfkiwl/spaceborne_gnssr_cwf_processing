@@ -1,7 +1,7 @@
 This repo is forked from the [ICE-CSIC/IEEC’s Gitlab repository](https://gitlab.ice.csic.es/earth-observation/spaceborne_gnssr_cwf_processing.git), see Li, W. et al. (2022), “Exploration of multi-mission spaceborne GNSS-R raw IF data sets: Processing, data products and potential applications,” Remote Sensing, 14(6), 1344. https://doi.org/10.3390/rs14061344
 
-# ToDO
-- [ ] implement a method to overlay the GNNS-R tracks with water cover datasets (e.g., with [Global Surface Water Explorer dataset](https://data.europa.eu/data/datasets/jrc-gswe-global-surface-water-explorer-v1)?) 
+# TODO
+- [ ] implement a method to overlay the GNNS-R tracks with water cover datasets (e.g., with [Global Surface Water Explorer dataset](https://data.europa.eu/data/datasets/jrc-gswe-global-surface-water-explorer-v1), [ArcLeads: Daily sea-ice lead maps for the Arctic, 2002-2021](https://doi.org/10.1594/PANGAEA.955561)?) 
 - [ ] implement other metrics of signal coherence (see e.g. Wang, Q. et al. (2025), “Current Status of Application of Spaceborne GNSS-R Raw Intermediate-Frequency Signal Measurements: Comprehensive Review,”
 Remote Sensing, 17(13), 2144, https://doi.org/10.3390/rs17132144) and compare their performance for tracks in Northern Europe and Arctics
 
@@ -11,11 +11,11 @@ Original README.md:
 # Spaceborne_cWF_Product
 
 A processing tool for the spaceborne GNSS-R complex waveform products available at IEEC's GOLD-RTR server.
- The project provides an example for accessing, searching and analyzing the compelx waveform product derived from the GNSS-R raw IF data collected by different spaceborne missions (e.g. TDS-1, CYGNSS, BuFeng-1, SPIRE).
+ The project provides an example for accessing, searching and analyzing the complex waveform product derived from the GNSS-R raw IF data collected by different spaceborne missions (e.g. TDS-1, CYGNSS, BuFeng-1, SPIRE).
 
 ## Functions:
 
-### Downloa_cWF_File_List:
+### Download_cWF_File_List:
 The lists of the product tracks are also available at the GOLD-RTR server. This function is to download the up-to-date lists of the complex waveform products, which include the basic information of the raw IF tracks, such as the raw IF data ID, the data collection time, the PRN of the GNSS transmitter, the SNR of the direct and reflected signals, and the geolocation of the specular point. 
 
 ### Find_RawIF_Track:
